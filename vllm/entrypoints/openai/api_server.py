@@ -18,6 +18,7 @@ from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse, Response
+from outlines.serve.vllm import JSONLogitsProcessor, RegexLogitsProcessor
 
 from vllm.engine.arg_utils import AsyncEngineArgs
 from vllm.engine.async_llm_engine import AsyncLLMEngine
@@ -31,7 +32,6 @@ from vllm.entrypoints.openai.protocol import (
     LogProbs, ModelCard, ModelList, ModelPermission, UsageInfo)
 from vllm.logger import init_logger
 from vllm.outputs import RequestOutput
-from vllm.model_executor.json_processor import JSONLogitsProcessor, RegexLogitsProcessor
 from vllm.sampling_params import SamplingParams
 from vllm.transformers_utils.tokenizer import get_tokenizer
 from vllm.utils import random_uuid
