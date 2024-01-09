@@ -31,6 +31,7 @@ from vllm.entrypoints.openai.protocol import (
     LogProbs, ModelCard, ModelList, ModelPermission, UsageInfo)
 from vllm.logger import init_logger
 from vllm.outputs import RequestOutput
+from vllm.model_executor.json_processor import JSONLogitsProcessor, RegexLogitsProcessor
 from vllm.sampling_params import SamplingParams
 from vllm.transformers_utils.tokenizer import get_tokenizer
 from vllm.utils import random_uuid
@@ -293,6 +294,18 @@ async def create_chat_completion(request: ChatCompletionRequest,
             skip_special_tokens=request.skip_special_tokens,
             spaces_between_special_tokens=spaces_between_special_tokens,
         )
+
+        formatters = []
+        if request.json_format:
+            logits_processor = JSONLogitsProcessor(request.json_format, engine)
+            formatters.append(logits_processor)
+
+        if request.regex_format:
+            logits_processor = RegexLogitsProcessor(request.regex_format, engine)
+            formatters.append(logits_processor)
+
+        sampling_params.logits_processors = formatters
+
     except ValueError as e:
         return create_error_response(HTTPStatus.BAD_REQUEST, str(e))
 
@@ -540,6 +553,18 @@ async def create_completion(request: CompletionRequest, raw_request: Request):
             skip_special_tokens=request.skip_special_tokens,
             spaces_between_special_tokens=spaces_between_special_tokens,
         )
+
+        formatters = []
+        if request.json_format:
+            logits_processor = JSONLogitsProcessor(request.json_format, engine)
+            formatters.append(logits_processor)
+
+        if request.regex_format:
+            logits_processor = RegexLogitsProcessor(request.regex_format, engine)
+            formatters.append(logits_processor)
+
+        sampling_params.logits_processors = formatters
+
     except ValueError as e:
         return create_error_response(HTTPStatus.BAD_REQUEST, str(e))
 

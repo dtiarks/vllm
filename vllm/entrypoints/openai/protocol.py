@@ -77,6 +77,8 @@ class ChatCompletionRequest(BaseModel):
     echo: Optional[bool] = False
     repetition_penalty: Optional[float] = 1.0
     min_p: Optional[float] = 0.0
+    json_format: Union[str, None] = None
+    regex_format: Union[str, None] = None
 
 
 class CompletionRequest(BaseModel):
@@ -106,6 +108,8 @@ class CompletionRequest(BaseModel):
     spaces_between_special_tokens: Optional[bool] = True
     repetition_penalty: Optional[float] = 1.0
     min_p: Optional[float] = 0.0
+    json_format: Union[str, None] = None
+    regex_format: Union[str, None] = None
 
 
 class LogProbs(BaseModel):
@@ -185,4 +189,5 @@ class ChatCompletionStreamResponse(BaseModel):
     model: str
     choices: List[ChatCompletionResponseStreamChoice]
     usage: Optional[UsageInfo] = Field(
-        default=None, description="data about request and response")
+        default=None, description="data about request and response"
+    )
